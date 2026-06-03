@@ -16,6 +16,7 @@
     --bianco: #ffffff;
     --tab-h: 56px;
     --section-h: calc(100vh - var(--tab-h));
+    --section-h: calc(100dvh - var(--tab-h));
     --max-w: 680px;
   }
 
@@ -33,8 +34,16 @@
     height: var(--section-h);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: 32px;
   }
   .section.active { display: block; }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .section { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+    .tabbar {
+      padding-bottom: env(safe-area-inset-bottom);
+      height: calc(56px + env(safe-area-inset-bottom));
+    }
+  }
 
   .inner {
     max-width: var(--max-w);
@@ -391,7 +400,7 @@
     <p class="claim">Radici nel territorio.<br>Cultura, tradizione e comunità.</p>
   </div>
   <div class="s1-body">
-    <p class="s1-lead">Un comune piccolo, un territorio grande. Dal Bonifati a Cittadella del Capo, dalle contrade al litorale: lavoriamo per tenere viva l'identità di ogni angolo del nostro comune — e per farla conoscere a chi non c'è ancora stato.</p>
+    <p class="s1-lead">Un comune piccolo, un territorio grande. Dal capoluogo a Cittadella del Capo, dalle contrade al litorale: lavoriamo per tenere viva l'identità di ogni angolo del nostro comune — e per farla conoscere a chi non c'è ancora stato.</p>
 
     <div class="stat-bar">
       <div class="stat-box">
@@ -407,7 +416,7 @@
     <div class="pilastri">
       <div class="pilastro">
         <div class="pilastro-title">Radici nel territorio</div>
-        <div class="pilastro-text">Siamo un'associazione locale. Conosciamo le frazioni, le tradizioni, i ritmi del paese. <strong>Non lavoriamo dall'esterno: siamo parte di ciò che promuoviamo.</strong></div>
+        <div class="pilastro-text">Siamo un'associazione locale, fatta di persone che vivono qui. Conosciamo le frazioni, le tradizioni, i ritmi del paese. <strong>Non lavoriamo dall'esterno: siamo parte di ciò che promuoviamo.</strong></div>
       </div>
       <div class="pilastro">
         <div class="pilastro-title">Un'estate che cresce ogni anno</div>
