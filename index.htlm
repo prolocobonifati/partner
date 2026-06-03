@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Loco Bonifati – Partner 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blu: #006ffe;
+    --arancio: #ff8d55;
+    --sabbia: #fcf1c4;
+    --nero: #000000;
+    --bianco: #ffffff;
+    --tab-h: 56px;
+    --section-h: calc(100vh - var(--tab-h));
+    --max-w: 680px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--nero);
+    background: var(--bianco);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .section {
+    display: none;
+    height: var(--section-h);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .section.active { display: block; }
+
+  .inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── TAB BAR ── */
+  .tabbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--tab-h);
+    background: var(--bianco);
+    border-top: 1.5px solid #e5e5e5;
+    display: flex;
+    z-index: 100;
+  }
+  .tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #888;
+    background: var(--bianco);
+    border: none;
+    transition: background 0.15s, color 0.15s;
+    padding: 0 4px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .tab.active { background: var(--blu); color: var(--bianco); }
+
+  /* ── S1: CHI SIAMO ── */
+  .s1-header {
+    background: var(--blu);
+    color: var(--bianco);
+    padding: 32px 20px 28px;
+  }
+  .s1-header h1 {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .s1-header .claim {
+    font-size: 14px;
+    opacity: 0.88;
+    line-height: 1.5;
+  }
+  .s1-body { background: var(--bianco); padding: 24px 20px 0; }
+  .s1-lead { font-size: 15px; line-height: 1.7; color: #111; margin-bottom: 20px; }
+
+  /* Stat bar */
+  .stat-bar {
+    display: flex; gap: 12px; margin-bottom: 24px;
+  }
+  .stat-box {
+    flex: 1; background: var(--sabbia); border-radius: 10px;
+    padding: 14px 12px; text-align: center;
+  }
+  .stat-num {
+    font-size: 26px; font-weight: 900; color: var(--blu); line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 11px; font-weight: 600; color: #555; line-height: 1.3;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  .pilastri { display: flex; flex-direction: column; gap: 0; margin-bottom: 0; }
+  .pilastro {
+    padding: 16px 0;
+    border-top: 1.5px solid #f0f0f0;
+  }
+  .pilastro:last-child { border-bottom: 1.5px solid #f0f0f0; }
+  .pilastro-title {
+    font-size: 14px; font-weight: 700; color: var(--nero);
+    margin-bottom: 5px; line-height: 1.2;
+  }
+  .pilastro-text { font-size: 13px; line-height: 1.65; color: #444; }
+  .pilastro-text strong { color: var(--nero); font-weight: 700; }
+
+  .s1-footer { background: var(--sabbia); padding: 16px 20px; margin-top: 24px; }
+  .s1-footer p { font-size: 12px; color: #444; line-height: 1.6; }
+
+  /* ── S2: PARTNERSHIP ── */
+  .s2-intro { padding: 28px 20px 20px; background: var(--bianco); }
+  .s2-intro h2 { font-size: 22px; font-weight: 900; color: var(--blu); margin-bottom: 12px; }
+  .s2-intro p { font-size: 14px; line-height: 1.65; color: #333; }
+
+  .detraibile-badge {
+    display: inline-block;
+    background: #e8f3ff;
+    color: var(--blu);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-top: 12px;
+  }
+
+  /* ── CARD PACCHETTI ── */
+  .s2-pacchetti { background: var(--sabbia); padding: 20px 20px 8px; }
+  .s2-pacchetti > .inner > h3 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #777; margin-bottom: 14px;
+  }
+
+  .pkg-card {
+    background: var(--bianco);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    border: 2px solid #e8e8e8;
+  }
+  .pkg-card.platinum { border-color: var(--arancio); }
+  .pkg-card.gold { border-color: #d4a700; }
+  .pkg-card.silver { border-color: #aaa; }
+  .pkg-card.bronze { border-color: #b07840; }
+
+  .pkg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  .pkg-card.platinum .pkg-header { background: #fff7f0; }
+  .pkg-card.gold .pkg-header { background: #fffbea; }
+
+  .pkg-meta {}
+  .pkg-level {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; margin-bottom: 2px;
+  }
+  .platinum .pkg-level { color: var(--arancio); }
+  .gold .pkg-level { color: #b08800; }
+  .silver .pkg-level { color: #888; }
+  .bronze .pkg-level { color: #8b5e30; }
+
+  .pkg-price {
+    font-size: 28px; font-weight: 900; line-height: 1; color: var(--nero);
+  }
+  .pkg-hook {
+    font-size: 12px; color: #555; margin-top: 3px; line-height: 1.4;
+  }
+
+  .pkg-reach {
+    text-align: right;
+  }
+  .pkg-reach-num {
+    font-size: 20px; font-weight: 900; color: var(--blu);
+    line-height: 1;
+  }
+  .platinum .pkg-reach-num { color: var(--arancio); }
+  .pkg-reach-label {
+    font-size: 10px; color: #888; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  .pkg-body { padding: 14px 16px 16px; }
+
+  /* Spazi visivi */
+  .spaces-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+    align-items: flex-end;
+  }
+  .space-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .space-rect {
+    background: #e8f0ff;
+    border: 1.5px solid var(--blu);
+    border-radius: 2px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .platinum .space-rect { background: #fff0e6; border-color: var(--arancio); }
+  .space-rect-label {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--blu);
+    text-align: center;
+    line-height: 1.2;
+    padding: 2px;
+  }
+  .platinum .space-rect-label { color: var(--arancio); }
+  .space-dim {
+    font-size: 9px;
+    color: #999;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .space-tag {
+    font-size: 9px;
+    background: #f5f5f5;
+    color: #444;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .platinum .space-tag { background: #fff0e6; color: var(--arancio); }
+
+  /* Grande formato: solo etichetta */
+  .space-big {
+    border: 1.5px dashed #ccc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .space-big-label {
+    font-size: 10px; font-weight: 700; color: #555;
+  }
+  .space-big-dim {
+    font-size: 9px; color: #aaa; font-weight: 600;
+  }
+
+  .pkg-benefits {
+    list-style: none; padding: 0;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+  }
+  .pkg-benefits li {
+    font-size: 12px; line-height: 1.55; color: #333;
+    padding: 5px 0 5px 18px;
+    border-bottom: 1px solid #f7f7f7;
+    position: relative;
+  }
+  .pkg-benefits li:last-child { border-bottom: none; }
+  .pkg-benefits li::before {
+    content: '';
+    position: absolute; left: 4px; top: 11px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blu);
+  }
+  .platinum .pkg-benefits li::before { background: var(--arancio); }
+
+  /* ── MODULI MANIFESTO ── */
+  .s2-manifesti { background: var(--bianco); padding: 20px 20px 8px; }
+  .s2-manifesti h3 { font-size: 16px; font-weight: 700; color: var(--nero); margin-bottom: 4px; }
+  .s2-manifesti .sub { font-size: 13px; color: #555; line-height: 1.55; margin-bottom: 16px; }
+
+  .manifesto-host {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+    background: #fafafa;
+  }
+  .manifesto-preview {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  /* il manifesto 100x140 in scala ~1:3.5 = 29x40px */
+  .manifesto-base {
+    width: 29px; height: 40px; flex-shrink: 0;
+    background: #e8e8e8;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    position: relative;
+  }
+  .manifesto-slot {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    background: var(--blu);
+    opacity: 0.25;
+    width: calc(100% - 4px);
+  }
+  .manifesto-modulo-info { flex: 1; }
+  .manifesto-modulo-name { font-size: 13px; font-weight: 700; }
+  .manifesto-modulo-dim { font-size: 11px; color: #888; margin-top: 2px; }
+  .manifesto-modulo-price { font-size: 20px; font-weight: 900; color: var(--blu); margin-top: 4px; }
+  .manifesto-dim-labels { display: flex; justify-content: flex-end; }
+  .manifesto-dim-label { font-size: 9px; color: #aaa; font-weight: 600; }
+
+  .modulo-nota {
+    font-size: 12px; color: #666; line-height: 1.5;
+    padding: 12px 16px;
+    background: var(--sabbia);
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .cta-wrap { padding: 20px 20px 32px; background: var(--bianco); text-align: center; }
+  .btn-cta {
+    display: inline-block; background: var(--blu); color: var(--bianco);
+    font-size: 15px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 15px 40px; border-radius: 8px; border: none; cursor: pointer;
+    text-decoration: none; transition: opacity 0.15s; width: 100%; max-width: 320px;
+  }
+  .btn-cta:hover { opacity: 0.88; }
+
+  /* ── S3: EVENTI ── */
+  .s3-intro { padding: 28px 20px 16px; background: var(--bianco); }
+  .s3-intro h2 { font-size: 22px; font-weight: 900; color: var(--blu); margin-bottom: 10px; }
+  .s3-intro p { font-size: 14px; line-height: 1.65; color: #333; }
+  .evento { padding: 22px 20px; }
+  .evento:nth-child(odd) { background: var(--bianco); }
+  .evento:nth-child(even) { background: var(--sabbia); }
+  .evento h3 { font-size: 17px; font-weight: 700; color: var(--blu); margin-bottom: 4px; }
+  .evento .edizione { font-size: 12px; font-weight: 700; color: var(--arancio); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .evento p { font-size: 14px; line-height: 1.65; color: #222; }
+
+  /* ── S4: CONTATTI ── */
+  #s4 { background: var(--blu); }
+  .s4-inner { max-width: var(--max-w); margin: 0 auto; padding: 36px 24px 48px; color: var(--bianco); }
+  .s4-inner h2 { font-size: 22px; font-weight: 900; margin-bottom: 28px; }
+  .contact-block { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+  .contact-row { display: flex; flex-direction: column; gap: 2px; }
+  .contact-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; }
+  .contact-value { font-size: 14px; font-weight: 600; color: var(--bianco); word-break: break-all; }
+  .contact-value a { color: var(--bianco); text-decoration: none; }
+  .contact-value a:hover { text-decoration: underline; }
+  .iban-box { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 14px 16px; margin-bottom: 28px; }
+  .iban-num { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; margin-top: 4px; word-break: break-all; }
+  .social-btns { display: flex; gap: 12px; }
+  .btn-social {
+    display: flex; align-items: center; gap: 8px; background: var(--arancio);
+    color: var(--bianco); font-size: 13px; font-weight: 700; padding: 12px 18px;
+    border-radius: 8px; text-decoration: none; transition: opacity 0.15s;
+    flex: 1; justify-content: center;
+  }
+  .btn-social:hover { opacity: 0.88; }
+</style>
+</head>
+<body>
+
+<!-- S1: CHI SIAMO -->
+<div id="s1" class="section active">
+  <div class="s1-header">
+    <h1>Pro Loco Bonifati</h1>
+    <p class="claim">Radici nel territorio.<br>Cultura, tradizione e comunità.</p>
+  </div>
+  <div class="s1-body">
+    <p class="s1-lead">Un comune piccolo, un territorio grande. Dal Bonifati a Cittadella del Capo, dalle contrade al litorale: lavoriamo per tenere viva l'identità di ogni angolo del nostro comune — e per farla conoscere a chi non c'è ancora stato.</p>
+
+    <div class="stat-bar">
+      <div class="stat-box">
+        <div class="stat-num">+1.000</div>
+        <div class="stat-label">persone ci seguono sui social</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">+10</div>
+        <div class="stat-label">eventi l'anno su tutto il territorio</div>
+      </div>
+    </div>
+
+    <div class="pilastri">
+      <div class="pilastro">
+        <div class="pilastro-title">Radici nel territorio</div>
+        <div class="pilastro-text">Siamo un'associazione locale. Conosciamo le frazioni, le tradizioni, i ritmi del paese. <strong>Non lavoriamo dall'esterno: siamo parte di ciò che promuoviamo.</strong></div>
+      </div>
+      <div class="pilastro">
+        <div class="pilastro-title">Un'estate che cresce ogni anno</div>
+        <div class="pilastro-text">Organizziamo eventi <strong>dalla costa alle contrade</strong>: musica, tradizione, sport di comunità. Il programma 2025 è il più ambizioso di sempre.</div>
+      </div>
+      <div class="pilastro">
+        <div class="pilastro-title">Partner, non sponsor</div>
+        <div class="pilastro-text">Chi collabora con noi <strong>non compra uno spazio: entra in un progetto.</strong> Costruiamo visibilità reale per le aziende che vogliono essere presenti dove la gente si ritrova davvero.</div>
+      </div>
+    </div>
+  </div>
+  <div class="s1-footer">
+    <p>Pro Loco Bonifati – Viale della Repubblica n°53, 87020 Bonifati (CS) – C.F. 92006540782</p>
+  </div>
+</div>
+
+<!-- S2: PARTNERSHIP -->
+<div id="s2" class="section">
+  <div class="s2-intro">
+    <div class="inner">
+      <h2>Diventa Partner</h2>
+      <p>Sostenere la Pro Loco Bonifati significa essere presenti dove la comunità si ritrova. Offriamo visibilità concreta su strada, nei comunicati stampa, sui social e nelle aree evento. Ogni budget ha la sua soluzione. E se nessun pacchetto si adatta alla tua realtà, costruiamo qualcosa su misura.</p>
+      <span class="detraibile-badge">Spese integralmente detraibili e deducibili</span>
+    </div>
+  </div>
+
+  <div class="s2-pacchetti">
+    <div class="inner">
+      <h3>Scegli il tuo livello</h3>
+
+      <!-- PLATINUM -->
+      <div class="pkg-card platinum">
+        <div class="pkg-header">
+          <div class="pkg-meta">
+            <div class="pkg-level">Platinum</div>
+            <div class="pkg-price">10.000€</div>
+            <div class="pkg-hook">La massima presenza su tutto il territorio</div>
+          </div>
+          <div class="pkg-reach">
+            <div class="pkg-reach-num">+7</div>
+            <div class="pkg-reach-label">città coperte</div>
+          </div>
+        </div>
+        <div class="pkg-body">
+          <!-- Spazi visivi -->
+          <div class="spaces-row">
+            <!-- Biglietto riffa fronte: ~85x55mm, scala 1:4 → ~21x14px — lo facciamo più grande per leggibilità -->
+            <div class="space-item">
+              <div class="space-rect" style="width:52px;height:32px">
+                <span class="space-rect-label">FRONTE<br>BIGLIETTO</span>
+              </div>
+              <div class="space-dim">85×55 mm<br>~5.000 biglietti</div>
+            </div>
+            <!-- Social post: quadrato -->
+            <div class="space-item">
+              <div class="space-rect" style="width:40px;height:40px">
+                <span class="space-rect-label">POST<br>SOCIAL</span>
+              </div>
+              <div class="space-dim">dedicato</div>
+            </div>
+            <!-- Video wall: 3×4m, rapporto 3:4, scala ~30x40px -->
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">VIDEO WALL</div>
+                <div class="space-big-dim">3×4 m</div>
+              </div>
+            </div>
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">BANNER STRADA</div>
+                <div class="space-big-dim">6×3 m · 45 gg</div>
+              </div>
+            </div>
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">BANNER PALCO</div>
+                <div class="space-big-dim">6×3 m</div>
+              </div>
+            </div>
+          </div>
+          <ul class="pkg-benefits">
+            <li>Spazi 6×3 su strada – 45 giorni (luglio-agosto) – Lamezia, Cosenza, Guardia, Cetraro, Belvedere, S.M. Cedro, Scalea</li>
+            <li>Citazione in tutti i comunicati stampa</li>
+            <li>Fronte biglietti riffa (~5.000 biglietti)</li>
+            <li>Spazio social dedicato + media partnership nazionale ad hoc</li>
+            <li>Video wall 3×4 e totem LED area festival</li>
+            <li>Banner 6×3 nella location e sul palco</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- GOLD -->
+      <div class="pkg-card gold">
+        <div class="pkg-header">
+          <div class="pkg-meta">
+            <div class="pkg-level">Gold</div>
+            <div class="pkg-price">5.000€</div>
+            <div class="pkg-hook">3 periodi di visibilità su strada, tutto agosto</div>
+          </div>
+          <div class="pkg-reach">
+            <div class="pkg-reach-num">3</div>
+            <div class="pkg-reach-label">periodi outdoor</div>
+          </div>
+        </div>
+        <div class="pkg-body">
+          <div class="spaces-row">
+            <!-- Biglietto riffa retro -->
+            <div class="space-item">
+              <div class="space-rect" style="width:52px;height:32px;background:#fffbe6;border-color:#d4a700">
+                <span class="space-rect-label" style="color:#b08800">RETRO<br>BIGLIETTO</span>
+              </div>
+              <div class="space-dim">85×55 mm<br>~5.000 biglietti</div>
+            </div>
+            <div class="space-item">
+              <div class="space-rect" style="width:40px;height:40px;background:#fffbe6;border-color:#d4a700">
+                <span class="space-rect-label" style="color:#b08800">POST<br>SOCIAL</span>
+              </div>
+              <div class="space-dim">dedicato</div>
+            </div>
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">BANNER STRADA</div>
+                <div class="space-big-dim">6×3 m · 15 gg ×3</div>
+              </div>
+            </div>
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">BANNER PALCO</div>
+                <div class="space-big-dim">6×3 m</div>
+              </div>
+            </div>
+          </div>
+          <ul class="pkg-benefits">
+            <li>Spazi 6×3 su strada – 15 giorni × 3 periodi (1-14 lug / 15-31 lug / 1-14 ago)</li>
+            <li>Citazione in tutti i comunicati stampa</li>
+            <li>Retro biglietti riffa (~5.000 biglietti)</li>
+            <li>Spazio social dedicato</li>
+            <li>Banner 6×3 nella location e sul palco</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SILVER -->
+      <div class="pkg-card silver">
+        <div class="pkg-header">
+          <div class="pkg-meta">
+            <div class="pkg-level">Silver</div>
+            <div class="pkg-price">2.000€</div>
+            <div class="pkg-hook">Visibilità su locandine in tutta la costa</div>
+          </div>
+          <div class="pkg-reach">
+            <div class="pkg-reach-num">~80 km</div>
+            <div class="pkg-reach-label">di costa coperta</div>
+          </div>
+        </div>
+        <div class="pkg-body">
+          <div class="spaces-row">
+            <!-- Locandina 70x100 — scala 1:10 → 7x10px, facciamo 21x30 leggibile -->
+            <div class="space-item">
+              <div class="space-rect" style="width:21px;height:30px;background:#f5f5f5;border-color:#aaa">
+                <span class="space-rect-label" style="color:#777;font-size:7px">LOC.</span>
+              </div>
+              <div class="space-dim">70×100 cm<br>Praia–San Lucido</div>
+            </div>
+            <div class="space-item">
+              <div class="space-rect" style="width:40px;height:40px;background:#f5f5f5;border-color:#aaa">
+                <span class="space-rect-label" style="color:#777">POST<br>SOCIAL</span>
+              </div>
+              <div class="space-dim">dedicato</div>
+            </div>
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">BANNER PALCO</div>
+                <div class="space-big-dim">6×3 m</div>
+              </div>
+            </div>
+          </div>
+          <ul class="pkg-benefits">
+            <li>Citazione in tutti i comunicati stampa</li>
+            <li>Presenza su locandine 70×100 da Praia a Mare a San Lucido</li>
+            <li>Spazio social dedicato</li>
+            <li>Banner 6×3 nella location e sul palco</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BRONZE -->
+      <div class="pkg-card bronze">
+        <div class="pkg-header">
+          <div class="pkg-meta">
+            <div class="pkg-level">Bronze</div>
+            <div class="pkg-price">1.000€</div>
+            <div class="pkg-hook">Sul palco e sui social, dalla prima all'ultima sera</div>
+          </div>
+        </div>
+        <div class="pkg-body">
+          <div class="spaces-row">
+            <div class="space-item">
+              <div class="space-rect" style="width:21px;height:30px;background:#fdf5ee;border-color:#b07840">
+                <span class="space-rect-label" style="color:#8b5e30;font-size:7px">LOC.</span>
+              </div>
+              <div class="space-dim">70×100 cm<br>Praia–San Lucido</div>
+            </div>
+            <div class="space-item">
+              <div class="space-rect" style="width:40px;height:40px;background:#fdf5ee;border-color:#b07840">
+                <span class="space-rect-label" style="color:#8b5e30">POST<br>SOCIAL</span>
+              </div>
+              <div class="space-dim">dedicato</div>
+            </div>
+            <div class="space-item">
+              <div class="space-big">
+                <div class="space-big-label">BANNER PALCO</div>
+                <div class="space-big-dim">6×3 m</div>
+              </div>
+            </div>
+          </div>
+          <ul class="pkg-benefits">
+            <li>Presenza su locandine 70×100 da Praia a Mare a San Lucido</li>
+            <li>Spazio social dedicato</li>
+            <li>Banner 6×3 nella location e sul palco</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODULI MANIFESTO -->
+  <div class="s2-manifesti">
+    <div class="inner">
+      <h3>Spazi su manifesto</h3>
+      <p class="sub">Manifesti 100×140 affissi su tutto il territorio comunale e lungo il litorale da Diamante a Paola, con proiezione sui Totem dell'area evento.</p>
+
+      <!-- Manifesto base: 100x140mm → scala 1:3.5 → ~29x40px -->
+      <!-- Modulo 1: 129x28mm → altezza 28mm su 140mm = 20% → 8px su 40px -->
+      <div class="manifesto-host">
+        <div class="manifesto-preview">
+          <div class="manifesto-base">
+            <div class="manifesto-slot" style="height:8px; bottom:2px;"></div>
+          </div>
+          <div class="manifesto-modulo-info">
+            <div class="manifesto-modulo-name">Modulo 1</div>
+            <div class="manifesto-modulo-dim">129 × 28 mm</div>
+            <div class="manifesto-modulo-price">100€</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modulo 2: 129x58mm → 58/140 = 41.4% → 16.5px su 40 ≈ 17px -->
+      <div class="manifesto-host">
+        <div class="manifesto-preview">
+          <div class="manifesto-base">
+            <div class="manifesto-slot" style="height:17px; bottom:2px;"></div>
+          </div>
+          <div class="manifesto-modulo-info">
+            <div class="manifesto-modulo-name">Modulo 2</div>
+            <div class="manifesto-modulo-dim">129 × 58 mm</div>
+            <div class="manifesto-modulo-price">250€</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modulo 3: 129x88mm → 88/140 = 62.8% → 25px su 40 -->
+      <div class="manifesto-host">
+        <div class="manifesto-preview">
+          <div class="manifesto-base">
+            <div class="manifesto-slot" style="height:25px; bottom:2px;"></div>
+          </div>
+          <div class="manifesto-modulo-info">
+            <div class="manifesto-modulo-name">Modulo 3</div>
+            <div class="manifesto-modulo-dim">129 × 88 mm</div>
+            <div class="manifesto-modulo-price">500€</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modulo-nota">I contributi sotto i 100€ ricevono un ringraziamento a fine manifestazione e un post social dedicato.</div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <div class="inner" style="text-align:center">
+      <button class="btn-cta" onclick="goTo('s4')">Contattaci per diventare partner</button>
+    </div>
+  </div>
+</div>
+
+<!-- S3: EVENTI -->
+<div id="s3" class="section">
+  <div class="s3-intro">
+    <div class="inner">
+      <h2>I nostri eventi</h2>
+      <p>Il programma della Pro Loco Bonifati cresce ogni anno. Con un contributo più significativo è possibile puntare a ospiti e nomi di maggiore richiamo, moltiplicando la visibilità per il partner e l'impatto sull'intero territorio.</p>
+    </div>
+  </div>
+  <div class="evento">
+    <div class="inner">
+      <h3>Immersioni Sonore</h3>
+      <div class="edizione">Seconda edizione</div>
+      <p>Un evento musicale che lo scorso anno ha registrato un successo oltre le aspettative. Quest'anno si ripresenta con ambizioni più alte. Pubblico trasversale, atmosfera unica, alto potenziale comunicativo per il partner.</p>
+    </div>
+  </div>
+  <div class="evento">
+    <div class="inner">
+      <h3>Festa di San Francesco</h3>
+      <div class="edizione">Ogni anno – terza domenica di agosto</div>
+      <p>Festa del Santo Patrono di Cittadella del Capo. Appuntamento fisso che richiama ogni anno presenze importanti tra residenti e turisti. Nomi di rilievo sul palco, pubblico numeroso e fedele.</p>
+    </div>
+  </div>
+  <div class="evento">
+    <div class="inner">
+      <h3>Giochi delle Frazioni</h3>
+      <div class="edizione">Rilancio storico – assenti dal 1997</div>
+      <p>Un evento che coinvolge l'intero comune, le sue frazioni e contrade. Forte valore identitario, alto potere aggregativo. Un'occasione unica per un partner che voglia legarsi al territorio in modo autentico.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S4: CONTATTI -->
+<div id="s4" class="section">
+  <div class="s4-inner">
+    <h2>Contatti</h2>
+    <div class="contact-block">
+      <div class="contact-row">
+        <span class="contact-label">Indirizzo</span>
+        <span class="contact-value">Viale della Repubblica n°53 – 87020 Bonifati (CS)</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Telefono</span>
+        <span class="contact-value"><a href="tel:3409794887">340 979 4887</a></span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Codice Fiscale</span>
+        <span class="contact-value">92006540782</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Email</span>
+        <span class="contact-value"><a href="mailto:prolocobonifati@gmail.com">prolocobonifati@gmail.com</a></span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">PEC</span>
+        <span class="contact-value"><a href="mailto:prolocobonifati2025@pec.it">prolocobonifati2025@pec.it</a></span>
+      </div>
+    </div>
+    <div class="iban-box">
+      <div class="contact-label">IBAN</div>
+      <div class="iban-num">IT11 D076 0116 2000 0107 6762 309</div>
+    </div>
+    <div class="social-btns">
+      <a href="https://www.instagram.com/prolocobonifati/" target="_blank" rel="noopener" class="btn-social">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        Instagram
+      </a>
+      <a href="https://www.facebook.com/p/Pro-Loco-Bonifati-100064496899984/" target="_blank" rel="noopener" class="btn-social">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        </svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<nav class="tabbar">
+  <button class="tab active" onclick="goTo('s1')">Chi siamo</button>
+  <button class="tab" onclick="goTo('s2')">Partnership</button>
+  <button class="tab" onclick="goTo('s3')">Eventi</button>
+  <button class="tab" onclick="goTo('s4')">Contatti</button>
+</nav>
+
+<script>
+  function goTo(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = ['s1','s2','s3','s4'].indexOf(id);
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+    document.getElementById(id).scrollTop = 0;
+  }
+</script>
+</body>
+</html>
